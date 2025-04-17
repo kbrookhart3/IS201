@@ -1,0 +1,147 @@
+.common{
+    text-align: center;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
+}
+
+.header{
+    height: 300px;
+    color: black;
+    line-height: 300px;
+    background-size: cover;         
+    background-repeat: no-repeat;   
+    background-position: center;
+    margin-bottom: 0;
+}
+
+.mainbody{
+    background-color: whitesmoke;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; 
+    padding: 0 20px;
+    margin-top: 0;
+}
+
+.footer{
+    background-color: lightgray;
+    color: black;
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    height: 25px;
+    padding-top: 5px;
+    text-align: center;
+    margin-top: 0;
+}
+
+img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 25%
+}
+
+.bodyimg{
+    display: block;
+    margin-left: 0;
+    margin-bottom: 15px;
+}
+
+nav{
+    background-color: lightgray;
+    padding: 20px;
+    overflow: hidden;
+    margin: 0;
+}
+
+nav a{
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+    padding: 20px;
+}
+
+nav a:hover{
+    background-color: #ccc;
+}
+
+.anchor{
+    background-color: #ccc;
+    padding: 20px;
+    overflow: hidden;
+    margin: 0;
+}
+
+.anchor a{
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+    padding: 20px;
+}
+
+.anchor a:hover{
+    background-color: lightgray;
+}
+
+h1{
+    font-size: 6rem;
+}
+
+h2{
+    font-size: 3rem;
+    padding-top: 20px;
+}
+
+h3{
+    font-size: 2rem;
+}
+
+li{
+    font-size: 1.5rem;
+    padding-bottom: 2;
+}
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; 
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    margin-bottom: 0px;
+  }
+  
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60%;
+    height: 60%;
+  }
+
+  .tableauPlaceholder {
+    width: 75%;             
+    height: 0;
+    padding-bottom: 2%;     
+    position: relative;
+    margin: 0 auto;
+    margin-bottom: 0;
+  }
+  
+  .tableauPlaceholder object {
+    transform: scale(0.2);  
+    transform-origin: top left; 
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 75%;
+    height: 75%;
+
+  }
+
+  .tableau-section {
+    padding: 0;            
+    margin: 0 auto;        
+    max-width: 75%;       
+  }
+  

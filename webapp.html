@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Riddle Generator</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background-image: url('assets/img/questionsbackground.jpg.avif'); 
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: #fff;
+      text-align: center;
+      overflow-x: hidden;
+    }
+
+    .nav {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 1em;
+      text-align: center;
+    }
+
+    .nav a {
+      color: #fff;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .nav a:hover {
+      text-decoration: underline;
+    }
+
+    header {
+      font-size: 2.5em;
+      margin-top: 30px;
+      text-shadow: 2px 2px 5px #000;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      margin: 40px auto;
+      border-radius: 15px;
+      max-width: 600px;
+      position: relative;
+    }
+
+    .riddle-text {
+      font-size: 1.5em;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 1em;
+      width: 70%;
+      border-radius: 10px;
+      border: none;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      margin: 5px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      background-color: #f0c000;
+      color: #000;
+      font-weight: bold;
+    }
+
+    .feedback {
+      margin-top: 15px;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    .scoreboard {
+      margin-top: 20px;
+      font-size: 1.2em;
+    }
+
+    .tally {
+      font-size: 1.5em;
+      line-height: 1.2;
+      margin: 10px 0;
+    }
+
+    .confetti {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+      overflow: hidden;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background-color: red;
+      opacity: 0.8;
+      animation: explode 2s ease-out forwards;
+    }
+
+    @keyframes explode {
+      0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--x), var(--y)) rotate(720deg) scale(0.5);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="index.html"> Home Page</a>
+    <a href="scratch.html">Scratch Page</a>
+    <a href="webapp.html">Riddle Generator</a>
+  </nav>
+
+  <header>🧠 Riddle Me This! 🎉</header>
+
+  <div class="container">
+    <div class="riddle-text" id="riddle">Click "New Riddle" to get started!</div>
+    
+    <input type="text" id="userGuess" placeholder="Enter your guess here..."/>
+    <br />
+    <button onclick="checkAnswer()">Submit Guess</button>
+    <button onclick="showAnswer()">Show Answer</button>
+    <button onclick="newRiddle()">New Riddle</button>
+    <button onclick="clearScores()">Clear Score</button>
+
+    <div class="feedback" id="feedback"></div>
+
+    <div class="scoreboard">
+      <p>✅ Correct Guesses:</p>
+      <div class="tally" id="correctTally"></div>
+      <p>❌ Incorrect Guesses:</p>
+      <div class="tally" id="incorrectTally"></div>
+    </div>
+  </div>
+
+  <div class="confetti" id="confetti"></div>
+
+  <script>
+    const riddles = [
+  { question: "What has to be broken before you can use it?", answer: "egg" },
+  { question: "I’m tall when I’m young, and I’m short when I’m old. What am I?", answer: "candle" },
+  { question: "What has a head, a tail, is brown, and has no legs?", answer: "penny" },
+  { question: "What can you catch, but not throw?", answer: "cold" },
+  { question: "I speak without a mouth and hear without ears. I have nobody, but I come alive with the wind. What am I?", answer: "echo" },
+  { question: "The more of me you take, the more you leave behind. What am I?", answer: "footsteps" },
+  { question: "What gets wetter the more it dries?", answer: "towel" },
+  { question: "I have cities but no houses, forests but no trees, and water but no fish. What am I?", answer: "map" },
+  { question: "What has one eye but can’t see?", answer: "needle" },
+  { question: "I’m found in socks, scarves and mittens; and often in the paws of playful kittens. What am I?", answer: "yarn" },
+  { question: "What comes once in a minute, twice in a moment, but never in a thousand years?", answer: "m" },
+  { question: "You see a boat filled with people. It hasn’t sunk, but when you look again you don’t see a single person on the boat. Why?", answer: "they are all married" },
+  { question: "What has many keys but can’t open a single lock?", answer: "piano" },
+  { question: "What invention lets you look right through a wall?", answer: "window" },
+  { question: "What begins with T, ends with T, and has T in it?", answer: "teapot" }
+];
+
+    let currentRiddle = null;
+    let correctCount = 0;
+    let incorrectCount = 0;
+
+    function newRiddle() {
+      const index = Math.floor(Math.random() * riddles.length);
+      currentRiddle = riddles[index];
+      document.getElementById("riddle").textContent = currentRiddle.question;
+      document.getElementById("feedback").textContent = "";
+      document.getElementById("userGuess").value = "";
+    }
+
+    function checkAnswer() {
+      const guess = document.getElementById("userGuess").value.trim().toLowerCase();
+      if (!currentRiddle) {
+        document.getElementById("feedback").textContent = "Click 'New Riddle' to start!";
+        return;
+      }
+
+      if (guess === currentRiddle.answer.toLowerCase()) {
+        document.getElementById("feedback").textContent = "🎉 Correct! Well done!";
+        correctCount++;
+        updateTally();
+        launchConfetti();
+      } else {
+        document.getElementById("feedback").textContent = "❌ Not quite. Try again!";
+        incorrectCount++;
+        updateTally();
+      }
+    }
+
+    function showAnswer() {
+      if (currentRiddle) {
+        document.getElementById("feedback").textContent = `💡 The answer is: ${currentRiddle.answer}`;
+      } else {
+        document.getElementById("feedback").textContent = "No riddle yet! Click 'New Riddle'.";
+      }
+    }
+
+    function clearScores() {
+      correctCount = 0;
+      incorrectCount = 0;
+      updateTally();
+      document.getElementById("feedback").textContent = "Scoreboard cleared!";
+    }
+
+    function updateTally() {
+      document.getElementById("correctTally").textContent = '|' .repeat(correctCount).replace(/(.{5})/g, '$1 ');
+      document.getElementById("incorrectTally").textContent = '|' .repeat(incorrectCount).replace(/(.{5})/g, '$1 ');
+    }
+
+    function launchConfetti() {
+      const confettiContainer = document.getElementById("confetti");
+      confettiContainer.innerHTML = "";
+      const count = 150;
+
+      for (let i = 0; i < count; i++) {
+        const confetti = document.createElement("div");
+        confetti.className = "confetti-piece";
+
+        const angle = Math.random() * 360;
+        const radius = Math.random() * 300 + 100;
+
+        const x = Math.cos(angle) * radius;
+        const y = Math.sin(angle) * radius;
+
+        confetti.style.left = "50vw";
+        confetti.style.top = "50vh";
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
+        confetti.style.setProperty('--x', `${x}px`);
+        confetti.style.setProperty('--y', `${y}px`);
+
+        confettiContainer.appendChild(confetti);
+      }
+
+      setTimeout(() => {
+        confettiContainer.innerHTML = "";
+      }, 2000);
+    }
+  </script>
+
+</body>
+</html>
